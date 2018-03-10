@@ -11,23 +11,35 @@
 #include "gfx.h"
 #include "inputd.h"
 
+<<<<<<< HEAD:input/input.c
 #define I_VERSION	2.16
+=======
+#define I_VERSION	2.13
+>>>>>>> 7210e81 (input: add RC Support for more Hardware):input.c
 
 #ifndef CONFIGDIR
 #define CONFIGDIR "/var/tuxbox/config"
 #endif
 #ifndef FONTDIR
+<<<<<<< HEAD:input/input.c
 #define FONTDIR	"/usr/share/fonts"
+=======
+#define FONTDIR	"/share/fonts"
+>>>>>>> 7210e81 (input: add RC Support for more Hardware):input.c
 #endif
 
 #define NCF_FILE CONFIGDIR "/neutrino.conf"
 
+<<<<<<< HEAD:input/input.c
 //freetype stuff
+=======
+>>>>>>> 7210e81 (input: add RC Support for more Hardware):input.c
 char FONT[128] = FONTDIR "/neutrino.ttf";
 // if font is not in usual place, we look here:
 #define FONT2 FONTDIR "/pakenham.ttf"
 
 #define BUFSIZE 	1024
+<<<<<<< HEAD:input/input.c
 
 FT_Error 		error;
 FT_Library		library;
@@ -48,6 +60,8 @@ struct fb_var_screeninfo var_screeninfo;
 
 int fb;
 int startx, starty, sx, ex, sy, ey;
+=======
+>>>>>>> 7210e81 (input: add RC Support for more Hardware):input.c
 
 //					   CMCST,   CMCS,  CMCT,    CMC,    CMCIT,  CMCI,   CMHT,   CMH
 //					   WHITE,   BLUE0, TRANSP,  CMS,    ORANGE, GREEN,  YELLOW, RED

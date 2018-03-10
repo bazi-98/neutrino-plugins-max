@@ -24,10 +24,6 @@
 #include FT_CACHE_H
 #include FT_CACHE_SMALL_BITMAPS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #ifndef CONFIGDIR
 #define CONFIGDIR "/var/tuxbox/config"
 #endif
