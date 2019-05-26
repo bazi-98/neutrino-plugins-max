@@ -231,12 +231,6 @@ AC_ARG_ENABLE(stb_startup,
 	[enable_stb_startup="yes"])
 AM_CONDITIONAL(ENABLE_STB_STARTUP, test "$enable_stb_startup" = "yes")
 
-AC_ARG_ENABLE(stb_startup_old,
-	AS_HELP_STRING([--enable-stb_startup_old], [enable stb_startup_old @<:@default=no@:>@]),
-	[enable_stb_startup_old="$enableval"],
-	[enable_stb_startup_old="no"])
-AM_CONDITIONAL(ENABLE_STB_STARTUP_OLD, test "$enable_stb_startup_old" = "yes")
-
 AC_ARG_ENABLE(userbouquets,
 	AS_HELP_STRING([--enable-userbouquets], [enable userbouquets @<:@default=yes@:>@]),
 	[enable_userbouquets="$enableval"],
