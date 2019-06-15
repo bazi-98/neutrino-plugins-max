@@ -1,25 +1,13 @@
-local resolution = {'1920x1080','1280x720','854x480','640x360','426x240','128x72'}
-local itags = {[37]='1920x1080',[96]='1920x1080',[22]='1280x720',[95]='1280x720',[136]='1280x720',[94]='854x480',[35]='854x480',[135]='854x480',
-		[18]='640x360',[93]='640x360',[34]='640x360',[134]='640x360',[5]='400x240',[6]='450x270',[133]='426x240',[36]='320x240',
-		[92]='320x240',[132]='320x240',[17]='176x144',[13]='176x144',[151]='128x72',
-		[85]='1920x1080p',[84]='1280x720',[83]='854x480',[82]='640x360'
-	}
-
-
-json = require "json"
-
-if #arg < 1 then return nil end
-local _url = arg[1]
-local ret = {}
-local Curl = nil
-
-function getdata(Url)
+function getdata(Url,outputfile)
 	if Url == nil then return nil end
 	if Curl == nil then
 		Curl = curl.new()
 	end
-	local ret, data = Curl:download{ url=Url, A="Mozilla/5.0"}
+	local ret, data = Curl:download{url=Url,A="Mozilla/5.0;",maxRedirs=5,followRedir=true,o=outputfile }
 	if ret == CURL.OK then
+		if outputfile then
+			return 1
+		end
 		return data
 	else
 		return nil
@@ -30,22 +18,22 @@ function hex2char(hex)
   return string.char(tonumber(hex, 16))
 end
 function unescape_uri(url)
-	if url == nil then return nil end
-	return url:gsub("%%(%x%x)", hex2char)
+  return url:gsub("%%(%x%x)", hex2char)
 end
 
 function js_extract(data,patern)
 	for  line  in  data:gmatch("(.-};)"  )  do
-		local m = line:match(patern)
-		if m then
+		local m = line:match(patern)                 
+		if m then	
 			return m
 		end
 	end
 	return nil
 end
 
---- vlc youtube.lua code
 function js_descramble( sig, js )
+-- 	local descrambler = js_extract( js, "%.set%([^,]-\"signature\",([^)]-)%(" )
+-- 	local descrambler = js_extract( js, "%.set%([^,]-%.sp,([^)]-)%(" )
 	local descrambler = js_extract( js, "%.set%([^,]-%.sp,[^;]-%((..)%(" )
 	if descrambler == nil then return sig end
 	local rules = js_extract( js, descrambler.."=function%([^)]*%){(.-)};" )
@@ -95,8 +83,10 @@ function js_descramble( sig, js )
 	if missing then
 		print( "Couldn't process youtube video URL, please check for updates to this script" )
 	end
+	print('signature=' .. sig)
 	return sig
 end
+
 local jsdata = nil
 function newsig(sig,js_url)
 	if sig and js_url then
@@ -110,19 +100,24 @@ function newsig(sig,js_url)
 	return nil
 end
 
-function getVideoData(yurl)
-	if yurl == nil then return 0 end
+local media = {}
+function media.getVideoUrl(yurl)
+local itags = {[37]='1920x1080',[96]='1920x1080',[22]='1280x720',[95]='1280x720',[136]='1280x720',[94]='854x480',[35]='854x480',[135]='854x480',
+		[18]='640x360',[93]='640x360',[34]='640x360',[134]='640x360',[5]='400x240',[6]='450x270',[133]='426x240',[36]='320x240',
+		[92]='320x240',[132]='320x240',[17]='176x144',[13]='176x144',[151]='128x72',
+		[85]='1920x1080p',[84]='1280x720',[83]='854x480',[82]='640x360'
+	}
+	if yurl == nil then return end
 
-	if yurl:find("www.youtube.com/user/") or yurl:find("youtube.com/channel") then --check user link
+	if yurl:find("www.youtube.com/user/") then --check user link
 		local youtube_user = getdata(yurl)
-		if youtube_user == nil then return 0 end
-		local youtube_live_url = youtube_user:match('feature=c4.-href="(/watch.-)"')
-		if youtube_live_url == nil then return 0 end
+		if youtube_user == nil then return end
+		local youtube_live_url = youtube_user:match('feature=c4.-href="(/watch.-)">')
+		if youtube_live_url == nil then return end
 		yurl = 'https://www.youtube.com' .. youtube_live_url
 	end
 
 	local video_url = nil
-	local count = 0
 	for i = 1,6 do
 		local data = getdata(yurl)
 		if data:find('player%-age%-gate%-content') then
@@ -137,55 +132,49 @@ function getVideoData(yurl)
 		end
 
 		if data then
-			local m3u_url = data:match('hlsManifestUrl..:..(https:\\.-m3u8)') or data:match('hlsvp.:.(https:\\.-m3u8)')
+			local m3u_url = data:match('hlsvp.:.(https:\\.-m3u8)')
 			if m3u_url == nil then
-				m3u_url = data:match('hlsManifestUrl..:..(https%%3A%%2F%%2F.-m3u8)') or data:match('hlsvp=(https%%3A%%2F%%2F.-m3u8)')
+				m3u_url = data:match('hlsvp=(https%%3A%%2F%%2F.-m3u8)')
 				if m3u_url then
 					m3u_url = unescape_uri(m3u_url)
 				end
 			end
-			local newname = data:match('<title>(.-)</title>')
-			M = misc.new()
-			local revision = 0
-			-- revision = M:GetRevision() -- enable if you use gstreamer
-			if revision == 1 and m3u_url then -- for gstreamer
-				m3u_url = m3u_url:gsub("\\", "")
-				entry = {}
-				entry['url']  = m3u_url
-				entry['band'] = "1" --dummy
-				entry['res1'] = 1280
-				entry['res2'] = 720
-				entry['name'] = ""
-				if newname then
-					entry['name'] = newname
-				end
-				count = count + 1
-				ret[count] = {}
-				ret[count] = entry
-				return count
-			elseif m3u_url then
+			if m3u_url then
 				m3u_url = m3u_url:gsub("\\", "")
 				local videodata = getdata(m3u_url)
+				local res = 0
 				for band, res1, res2, url in videodata:gmatch('#EXT.X.STREAM.INF.BANDWIDTH=(%d+).-RESOLUTION=(%d+)x(%d+).-(http.-)\n') do
 					if url and res1 then
-						url = url:gsub("/keepalive/yes","")--fix for new ffmpeg
-						entry = {}
-						entry['url']  = url
-						entry['band'] = band
-						entry['res1'] = res1
-						entry['res2'] = res2
-						entry['name'] = ""
-						if newname then
-							entry['name'] = newname
+						local nr = tonumber(res1)
+						if nr < 2000 and nr > res then
+							res=nr
+							url = url:gsub("/keepalive/yes","")--fix for new ffmpeg
+							video_url = url
 						end
-						count = count + 1
-						ret[count] = {}
-						ret[count] = entry
 					end
 				end
 			end
-			if count > 0 then return count end
+			if video_url and #video_url > 8 then
+				media.VideoUrl=video_url
+			end
+			if video_url then return end
+
+			local fmt_list=data:match('"fmt_list":"(.-)",')
+			local myitag = nil
 			local myurl = nil
+			if fmt_list then
+				for itag in fmt_list:gmatch("(%d+)\\/[^,]+" ) do
+					if itag then
+						if itags[tonumber(itag)] then
+							myitag=itag
+							break
+						end
+					end
+				end
+			end
+			if not myitag then myitag =data:match('fmt_list=(%d+)') end
+			if not myitag then return end
+
 			local url_map = data:match('"url_encoded_fmt_stream_map":"(.-)"' )
 			if url_map == nil then
 				url_map = data:match('url_encoded_fmt_stream_map=(.-)$' )
@@ -193,63 +182,40 @@ function getVideoData(yurl)
 			end
 			if url_map then
 				for url in url_map:gmatch( "[^,]+" ) do
-					if url then
+					if url and url:find('itag=' .. myitag) then
 						myurl=url:match('url=(.-)$')
-						local myitag = ""
 						if myurl then
-							myitag = myurl:match('itag=(%d+)') or myurl:match('itag%%3D(%d+)')
-						else
-							myitag = data:match('fmt_list=(%d+)')
-						end
-						if myurl and myitag ~= nil and itags[tonumber(myitag)] then
 							if url:sub(1, 4) == 'url=' then
 								myurl=url:match('url=(.-)$')
 							else
 								myurl=url:match('url=(.-)$') .. "&" .. url:match('(.-)url')
-							end
-							local s=myurl:match('s=([%%%-%=%w+_]+)')
+							end						
+							local s=myurl:match('s=(%w+.%w+)')
 							if s then
-								local s2=unescape_uri(s)
 								local js_url= data:match('<script src="([/%w%p]+base%.js)"')
-								local signature = newsig(s2,js_url)
+								local signature = newsig(s,js_url)
 								if signature then
-									s = s:gsub("[%+%?%-%*%(%)%.%[%]%^%$%%]","%%%1")
-									signature = signature:gsub("[%%]","%%%%")
-									myurl = myurl:gsub('s=' .. s ,'sig=' .. signature)
+									myurl=myurl:gsub('s=' .. s ,'signature=' .. signature)
 								end
 							end
 							myurl=myurl:gsub("itag=" .. myitag, "")
 							myurl=myurl:gsub("\\u0026", "&")
 							myurl=myurl:gsub("&&", "&")
 							video_url=unescape_uri(myurl)
-							local itagnum = tonumber(myitag)
-							entry = {}
-							entry['url']  = video_url
-							entry['band'] = "1" --dummy
-							entry['res1'] = itags[itagnum]:match('(%d+)x')
-							entry['res2'] = itags[itagnum]:match('x(%d+)')
-							entry['name'] = ""
-							if newname then
-								entry['name'] = newname
-							end
-							count = count + 1
-							ret[count] = {}
-							ret[count] = entry
+							break
 						end
 					end
 				end
 			end
 		end
-		if count > 0 then
+		if video_url then
 			print("TRY",i)
 			break
 		end
 	end
-	return count
+	if video_url and #video_url > 8 then
+		media.VideoUrl=video_url
+	end
 end
 
-if (getVideoData(_url) > 0) then
-	return json:encode(ret)
-end
-
-return ""
+return media
