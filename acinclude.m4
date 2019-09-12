@@ -294,9 +294,9 @@ _TUXBOX_APPS_LIB_PKGCONFIG($1,$2)
 
 AC_DEFUN([TUXBOX_BOXTYPE], [
 AC_ARG_WITH(boxtype,
-	AS_HELP_STRING([--with-boxtype], [valid values: coolstream, generic, armbox, mipsbox]),
+	AS_HELP_STRING([--with-boxtype], [valid values: generic, coolstream, armbox, mipsbox]),
 	[case "${withval}" in
-		coolstream|generic|armbox|mipsbox)
+		generic|coolstream|armbox|mipsbox)
 			BOXTYPE="$withval"
 		;;
 		*)
@@ -354,7 +354,8 @@ AS_HELP_STRING([], [valid for mipsbox: vuduo]),
 		*)
 			AC_MSG_ERROR([unsupported value $withval for --with-boxmodel])
 		;;
-	esac])
+	esac],
+	[BOXMODEL="generic"])
 
 AC_SUBST(BOXTYPE)
 AC_SUBST(BOXMODEL)
