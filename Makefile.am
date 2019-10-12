@@ -57,12 +57,12 @@ endif
 if ENABLE_VINFO
 SUBDIRS += vinfo
 endif
-if BOXMODEL_VUSOLO4K
+if BOXMODEL_VUDUO4K
 SUBDIRS += vu-initfb
 SUBDIRS += vu-oled_ctrl
 SUBDIRS += vu-turnoff_power
 endif
-if BOXMODEL_VUDUO4K
+if BOXMODEL_VUSOLO4K
 SUBDIRS += vu-initfb
 SUBDIRS += vu-oled_ctrl
 SUBDIRS += vu-turnoff_power
@@ -70,6 +70,10 @@ endif
 if BOXMODEL_VUULTIMO4K
 SUBDIRS += vu-initfb
 SUBDIRS += vu-oled_ctrl
+SUBDIRS += vu-turnoff_power
+endif
+if BOXMODEL_VUUNO4K
+SUBDIRS += vu-initfb
 SUBDIRS += vu-turnoff_power
 endif
 if BOXMODEL_VUZERO4K
