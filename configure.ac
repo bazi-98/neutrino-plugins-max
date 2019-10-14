@@ -238,7 +238,7 @@ AC_ARG_ENABLE(stb_startup,
 AM_CONDITIONAL(ENABLE_STB_STARTUP, test "$enable_stb_startup" = "yes")
 
 AC_ARG_ENABLE(stb_startup_vuplus,
-	AS_HELP_STRING([--enable-stb_startup_vupls], [enable stb_startup_vuplus @<:@default=no@:>@]),
+	AS_HELP_STRING([--enable-stb_startup_vuplus], [enable stb_startup_vuplus @<:@default=no@:>@]),
 	[enable_stb_startup_vuplus="$enableval"],
 	[enable_stb_startup_vuplus="no"])
 AM_CONDITIONAL(ENABLE_STB_STARTUP_VUPLUS, test "$enable_stb_startup_vuplus" = "yes")
