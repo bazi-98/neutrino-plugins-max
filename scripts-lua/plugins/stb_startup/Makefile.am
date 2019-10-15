@@ -1,6 +1,6 @@
 plugindir = $(PLUGINDIR)
 
-if ENABLE_STB_STARTUP_VUPLUS
+if BOXMODEL_VUPLUS
 plugin_DATA = \
 	stb-startup_vuplus.cfg \
 	stb-startup_vuplus.lua \
