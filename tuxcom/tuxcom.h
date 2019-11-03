@@ -22,9 +22,11 @@
 	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA
 */
 
-#define _FILE_OFFSET_BITS 64
-#define _GNU_SOURCE
 #include <config.h>
+#define _FILE_OFFSET_BITS 64
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
 #include <errno.h>
 #include <locale.h>
 #include <fcntl.h>
