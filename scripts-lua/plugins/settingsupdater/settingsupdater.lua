@@ -418,7 +418,7 @@ if check_for_update() then show_msg(locale[lang].update_available) end
 
 function main()
 	chooser_dx = n:scale2Res(560)
-	chooser_dy = n:scale2Res(400)
+	chooser_dy = n:scale2Res(350)
 	chooser_x = SCREEN.OFF_X + (((SCREEN.END_X - SCREEN.OFF_X) - chooser_dx) / 2)
 	chooser_y = SCREEN.OFF_Y + (((SCREEN.END_Y - SCREEN.OFF_Y) - chooser_dy) / 2)
 
@@ -433,10 +433,10 @@ function main()
 	btnGreen = locale[lang].menu_update,
 	btnRed = locale[lang].menu_options
 	}
-	picture = cpicture.new {
-	parent = chooser,
-	image="settingupdater",
-	}
+
+	image = icondir .. "/settingupdater.png"
+	chooser:setBodyImage{image_path=image}
+
 	chooser:paint()
 	i = 0
 	d = 500 -- ms
