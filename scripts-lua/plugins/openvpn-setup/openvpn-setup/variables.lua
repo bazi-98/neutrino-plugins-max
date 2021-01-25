@@ -11,11 +11,11 @@ end
 conf_base	= "/var/etc/openvpn"
 init_base	= "/etc/init.d"
 
-init_script	= init_base .. "/ovpn"
+init_script	= init_base .. "/openvpn"
 --[[
 init_links	= {
-	start	= init_base .. "/S99ovpn",
-	stop	= init_base .. "/K01ovpn"
+	start	= init_base .. "/S99openvpn",
+	stop	= init_base .. "/K01openvpn"
 }
 ]]
 
