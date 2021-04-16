@@ -1,7 +1,7 @@
 #!/bin/sh
 # Script for complete image backup
 # License: GPLv2 or later
-Version="1.29 vom 15.04.2021"
+Version="1.30 vom 16.04.2021"
 Copyright="(C) 2018-2021 DboxOldie / BPanther / Frankenstone / Fritz"
 
 #
@@ -96,6 +96,12 @@ select_backup_dir() {
 			echo "  Abbruch!" && exit
 		fi
 		OPT=`echo "" && find "$save_path" -type d -maxdepth 1 | awk '{print "\""$0"\","}'`
+		OPT_SYM=`find "$save_path" -type l -maxdepth 1`
+		for datei in $OPT_SYM; do
+			if [[ -L "$datei" && -d "$datei" ]]; then
+				OPT=`echo "$OPT" && echo "$datei" | awk '{print "\""$0"\","}'`
+			fi
+		done
 		OPT=`echo "$OPT" | grep -v "/tmp/mnt"`
 		loop=$((loop + 1))
 	done
