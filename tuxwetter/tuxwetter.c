@@ -186,6 +186,7 @@ int rclocked=0;
 int swidth;
 int stride;
 
+#if !HAVE_GENERIC_HARDWARE
 static inline int dev_open()
 {
 	int fd = open(DISPLAY_DEV, DISPLAY_OPMODE);
@@ -210,6 +211,7 @@ void ShowText(const char * str)
 #endif
 	close(fd);
 }
+#endif
 
 int get_instance(void)
 {
@@ -890,7 +892,9 @@ char *lcptr = NULL, *lcstr= NULL, *lcdptr = NULL;
 			}
 			*(lcdptr++)=*(lcptr++);
 		}
+#if !HAVE_GENERIC_HARDWARE
 		ShowText(lcstr);
+#endif
 #if 0
 		*lcptr=0;
 		LCD_Clear();
