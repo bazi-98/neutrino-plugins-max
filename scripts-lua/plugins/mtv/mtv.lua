@@ -80,8 +80,8 @@ end
 function loadConfig()
 	local config	= configfile.new()
 	config:loadConfig(get_confFile())
-	conf.path = config:getString("path", "/media/sda1/movies/")
-	conf.path_m3u = config:getString("path_m3u", "/media/sda1/movies/")
+	conf.path = config:getString("path", "/media/hdd/movie/")
+	conf.path_m3u = config:getString("path_m3u", "/media/hdd/movie/")
 	conf.dlflag = config:getBool("dlflag", false)
 	conf.flvflag = config:getBool("flvflag", false)
 	conf.hlsflag = config:getBool("hlsflag", true) --hls as default, rtmp server is broken???

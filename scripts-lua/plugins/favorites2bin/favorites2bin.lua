@@ -8,7 +8,7 @@
 local n = neutrino()
 
 favs = "/var/tuxbox/config/zapit/ubouquets.xml"
-dest = "/media/sda1"
+dest = "/media/hdd"
 
 locale = {}
 locale["deutsch"] = {

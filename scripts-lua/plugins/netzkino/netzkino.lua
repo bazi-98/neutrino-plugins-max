@@ -507,7 +507,7 @@ function download_stream(_id)
 				if (key) then
 					if key == "network_nfs_recordingdir" then
 						if (val == nil) then
-							d_path ="/media/sda1/movies/";
+							d_path ="/media/hdd/movie/";
 						else
 							d_path = val;
 						end
