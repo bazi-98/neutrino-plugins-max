@@ -10,7 +10,7 @@ void read_neutrino_osd_conf ( int *ex,int *sx,int *ey, int *sy, int *preset)
 	const char *filename = CONFIGDIR "/neutrino.conf";
 	const char spres[][4]={"","a","b"};
 	char sstr[4][32];
-	int step=0, pres=-1, resolution=-1, loop, *sptr[5]={ex, sx, ey, sy, preset};
+	int pres=-1, resolution=-1, loop, *sptr[5]={ex, sx, ey, sy, preset};
 	char *buffer;
 	size_t len;
 	ssize_t read;
@@ -21,8 +21,6 @@ void read_neutrino_osd_conf ( int *ex,int *sx,int *ey, int *sy, int *preset)
 		buffer=NULL;
 		len = 0;
 		while ((read = getline(&buffer, &len, fd)) != -1){
-			if(strstr(buffer, "screen_EndX_a"))
-				step = 2;
 			sscanf(buffer, "screen_preset=%d", &pres);
 			sscanf(buffer, "osd_resolution=%d", &resolution);
 			*preset = pres;
@@ -31,7 +29,6 @@ void read_neutrino_osd_conf ( int *ex,int *sx,int *ey, int *sy, int *preset)
 			free(buffer);
 		rewind(fd);
 		++pres;
-		pres += step;
 		if (resolution == -1)
 		{
 			sprintf(sstr[0], "screen_EndX_%s=%%d", spres[pres]);

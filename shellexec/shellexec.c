@@ -1659,7 +1659,7 @@ int llev=m->headerlevels[m->act_header], lmen=m->act_header, lentr=m->lastheader
 
 int main (int argc, char **argv)
 {
-	int index=0, cindex=0, mainloop=1, step=0, tv, spr, resolution;
+	int index=0, cindex=0, mainloop=1, tv, spr, resolution;
 	char tstr[BUFSIZE]={0}, *rptr;
 	PLISTENTRY pl;
 
@@ -1711,9 +1711,7 @@ int main (int argc, char **argv)
 		return -1;
 	}
 
-	if(Read_Neutrino_Cfg("screen_EndX_a_0")>=0)
-		step = 2;
-	spr=Read_Neutrino_Cfg("screen_preset") + 1 + step;
+	spr=Read_Neutrino_Cfg("screen_preset") + 1;
 	resolution=Read_Neutrino_Cfg("osd_resolution");
 
 	if (resolution == -1)
