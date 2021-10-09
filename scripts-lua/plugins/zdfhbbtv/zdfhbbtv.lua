@@ -5,13 +5,13 @@
 ]]
 
 function init()
-	Version = 0.17
+	Version = 0.19
 	picfile = "/tmp/ZDFhbbtvEpg.jpg"
 	dlPath = '/'
 	lastmid = 1000
 	json = require "json"
 	fh = filehelpers.new()
-	aktivelist = get_zdf_data('http://hbbtv.zdf.de/zdfm3/dyn/get.php')
+	inittab()
 	n = neutrino()
 	vPlay = video.new()
 	nMisc = misc.new()
@@ -28,6 +28,17 @@ function init()
 	zdfhbbtv_icon = script_path() .. '/zdfhbbtv_hint.png'
 	if not fh:exist(zdfhbbtv_icon , "f") then
 		zdfhbbtv_icon='streaming'
+	end
+end
+
+function inittab()
+	local url = 'http://hbbtv.zdf.de/zdfm3/dyn/get.php'
+	aktivelist = {}
+	aktivelist = get_zdf_data(url)
+	local jnTab = get_zdf_data(url .. '?id=special:time')
+	if jnTab and jnTab.elems and jnTab.elems[1] and jnTab.elems[1].elems then
+		lastmid = lastmid + 1
+		table.insert(aktivelist.elems,{title='Sendung verpasst',myid=lastmid,elems=jnTab.elems[1].elems})
 	end
 end
 
@@ -111,7 +122,7 @@ function getMaxRes()
 end
 
 function getdata(Url,Postfields,outputfile,pass_headers,httpheaders)
-	local h = hintbox.new{caption="Please Wait ...", text="I'm Thinking."}
+	local h = hintbox.new{text="Lese Daten..."}
 	if h then
 		h:paint()
 	end
@@ -124,7 +135,7 @@ function getdata(Url,Postfields,outputfile,pass_headers,httpheaders)
 		Url =  'https:' .. Url
 	end
 
-	local ret, data = Curl:download{ url=Url, A="Mozilla/5.0",maxRedirs=5,followRedir=false,postfields=Postfields,header=pass_headers,o=outputfile,httpheader=httpheaders }
+	local ret, data = Curl:download{ url=Url, A="Mozilla/5.0",maxRedirs=5,followRedir=true,postfields=Postfields,header=pass_headers,o=outputfile,httpheader=httpheaders }
 	if h then
 		h:hide()
 	end
@@ -605,21 +616,24 @@ function getZDFstream(tab)
 	if jdata then
 		local jnTab = json:decode(jdata)
 		if jnTab and jnTab.streams then
-			local streams = jnTab.streams[1]
-			if streams then
-				local maxRes = getMaxRes()
-				tab.audiostream = nil
-				local mp4 = streams.h264_aac_mp4_http_na_na
-				local m3u8 = streams.h264_aac_ts_http_m3u8_http
-				local mpd = streams.h264_aac_mp4_http_mpd_http
-				if maxRes > 1281 and mp4 and mp4.main and mp4.main.deu and mp4.main.deu.q3 then
-					tab.stream = mp4.main.deu.q3
-				elseif maxRes < 1281 and mp4 and mp4.main and mp4.main.deu and mp4.main.deu.q1 then
-					tab.stream = mp4.main.deu.q1
-				elseif m3u8 and m3u8.main and m3u8.main.deu and m3u8.main.deu.q3 then
-					tab.stream , tab.audiostream = getVideoUrlM3U8(m3u8.main.deu.q3)
-				elseif mpd and mpd.main and mpd.main.deu then
-					tab.stream = mpd.main.deu
+			local maxRes = getMaxRes()
+			tab.audiostream = nil
+			tab.stream = nil
+			for _, streams in pairs(jnTab.streams) do
+				if streams and tab.stream == nil then
+					local mp4 = streams.h264_aac_mp4_http_na_na
+					local m3u8 = streams.h264_aac_ts_http_m3u8_http
+					local mpd = streams.h264_aac_mp4_http_mpd_http
+					if maxRes > 1281 and mp4 and mp4.main and mp4.main.deu and mp4.main.deu.q3 then
+						tab.stream = mp4.main.deu.q3
+						break
+					elseif maxRes < 1281 and mp4 and mp4.main and mp4.main.deu and mp4.main.deu.q1 then
+						tab.stream = mp4.main.deu.q1
+					elseif m3u8 and m3u8.main and m3u8.main.deu and m3u8.main.deu.q3 then
+						tab.stream , tab.audiostream = getVideoUrlM3U8(m3u8.main.deu.q3)
+					elseif mpd and mpd.main and mpd.main.deu then
+						tab.stream = mpd.main.deu
+					end
 				end
 			end
 			Epg,Title,Info1,Info2,UrlPic = nil,nil,nil,nil,nil
@@ -728,7 +742,7 @@ function main_menu(liste)
 	hid = hid + 1
 
 	local ptype = {}
-	local warning = 2
+	local warning = 4
 	for i, el in ipairs(liste.elems) do
 		if el.elems then
 			for j, v in ipairs(el.elems) do
@@ -767,7 +781,7 @@ function main_menu(liste)
 			end
 			if v.infoline and v.infoline.text then
 				if vhint then
-					vhint = vhint .. ' ' .. v.infoline.text
+					vhint = vhint .. ' - ' .. v.infoline.text
 				else
 					vhint = v.infoline.text
 				end
@@ -780,10 +794,16 @@ function main_menu(liste)
 				end
 			end
 			if (not vhint and hid > warning and ptype[i] == 'page') or hid > 13 then
-				vhint = 'Zurück zum Start-Menü über Menü-Taste'
+				vhint = 'Untermenü - Zurück zum Start-Menü über Menü-Taste'
 			end
-			if hid > 1 and not vhint and ptype[i] == 'video'then
-				vhint = 'Videos'
+			if not vhint and ptype[i] == 'video' then
+				vhint = 'Video-Untermenü'
+			end
+			if (not vhint and ptype[i] == 'video') or hid > 13 then
+				vhint = 'Video-Untermenü - Zum Start-Menü über Menü-Taste'
+			end
+			if not vhint and ptype[i] == 'page' then
+				vhint = 'Untermenü'
 			end
 			mname = xml_entities(mname)
 			vhint = xml_entities(vhint)
@@ -796,7 +816,7 @@ function main_menu(liste)
 			if one then 	menu:addItem{type='subhead', name='Videos'} one = false end
 			d=d+1
 			local mact = 'selPlay'
-			local hico = 'hint_movie'
+			local hico = 'video'
 			local mname =  v.titletxt or v.title or v.myid or '## error ##'
 			local vhint = nil
 			if v.headtxt then
@@ -804,7 +824,7 @@ function main_menu(liste)
 			end
 			if v.infoline and v.infoline.text then
 				if vhint then
-					vhint = vhint .. ' ' .. v.infoline.text
+					vhint = vhint .. ' - ' .. v.infoline.text
 				else
 					vhint = v.infoline.text
 				end
