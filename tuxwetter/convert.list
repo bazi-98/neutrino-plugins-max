@@ -1,7 +1,7 @@
 null|0
 AM CLOUDS / PM SUN|Vormittags wolkig später sonnig
 AM FOG / PM CLOUDS|Vormittag Nebel / Nachmittag wolkig
-AM FOG / PM SUN|Vormittag Nebel / Nachmittag sonnig 
+AM FOG / PM SUN|Vormittag Nebel / Nachmittag sonnig
 AM LIGHT RAIN|vormittags leichter Regen
 AM LIGHT RAIN / WINDSHOWERS / WIND LATE|vorm. leichter Regen, windig
 AM LIGHT SNOW|vormittags leichter Schneefall
@@ -47,8 +47,6 @@ FREEZING FOG|gefrierender Nebel
 FREEZING RAIN|Eisregen
 FREEZING RAIN / SLEET|gefrierender Regen, Graupel
 FRIDAY|Freitag
-FULL|Vollmond
-FULL MOON|Vollmond
 GERMANY|Deutschland
 HAZE|dunstig
 HEAVY FREEZING DRIZZLE|stark gefrierender Nieselregen
@@ -70,7 +68,7 @@ LIGHT RAIN|leichter Regen
 LIGHT RAIN AND WINDY|leichter Regen, stürmisch
 LIGHT RAIN EARLY|anfangs leichter Regen
 LIGHT RAIN LATE|später leichter Regen
-LIGHT RAIN SHOWER|leichte Schauer 
+LIGHT RAIN SHOWER|leichte Schauer
 LIGHT RAIN SHOWER AND WINDY|leichte Regenschauer, stürmisch
 LIGHT RAIN / WIND|leichter Regen, windig
 LIGHT RAIN / WIND LATE|im Verlauf leichter Regen, windig
@@ -101,15 +99,22 @@ MODERATE RAIN|mäßiger Regen
 MODERATE RAIN AT TIMES|zeitweise mäßiger Regen
 MODERATE SNOW|mäßiger Schneefall
 MONDAY|Montag
+MOONPHASE_0|Neumond
+MOONPHASE_1|Zunehmender Sichelmond
+MOONPHASE_2|Zunehmender Halbmond (1.Viertel)
+MOONPHASE_3|Zunehmender Dreiviertelmond
+MOONPHASE_4|Vollmond
+MOONPHASE_5|Abnehmender Dreiviertelmond
+MOONPHASE_6|Abnehmender Halbmond (letztes Viertel)
+MOONPHASE_7|Abnehmender Sichelmond
+MOONPHASE_8|Mondphase konnte nicht ermittelt werden
 MOSTLY CLEAR|überwiegend heiter
 MOSTLY CLOUDY AND WINDY|überwiegend bewölkt, stürmisch
 MOSTLY CLOUDY / WIND|überwiegend bewölkt, stürmisch
 MOSTLY CLOUDY|überwiegend bewölkt
 MOSTLY SUNNY|überwiegend sonnig
 MOSTLY|überwiegend
-N/A| 
-NEW MOON|Neumond
-NEW|Neumond
+N/A|
 OVERCAST|bedeckt
 PARTLY|teils
 PARTLY CLOUDY|teils wolkig
