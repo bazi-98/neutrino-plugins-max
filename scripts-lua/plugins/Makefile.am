@@ -37,8 +37,14 @@ endif
 if ENABLE_LOGOUPDATER
 SUBDIRS += logoupdater
 endif
+if ENABLE_MEDIATHEK
+SUBDIRS += mediathek
+endif
 if ENABLE_MTV
 SUBDIRS += mtv
+endif
+if ENABLE_N_LIBRARIES
+SUBDIRS += n_libraries
 endif
 if ENABLE_NETZKINO
 SUBDIRS += netzkino
