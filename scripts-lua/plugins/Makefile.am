@@ -43,9 +43,6 @@ endif
 if ENABLE_MTV
 SUBDIRS += mtv
 endif
-if ENABLE_N_LIBRARIES
-SUBDIRS += n_libraries
-endif
 if ENABLE_NETZKINO
 SUBDIRS += netzkino
 endif

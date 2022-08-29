@@ -387,9 +387,6 @@ AC_ARG_ENABLE(yt_live,
 	[enable_yt_live="yes"])
 AM_CONDITIONAL(ENABLE_YT_LIVE, test "$enable_yt_live" = "yes")
 
-dnl enable n_libraries by conditions set above
-AM_CONDITIONAL(ENABLE_N_LIBRARIES, test "$enable_mediathek" = "yes")
-
 AC_CONFIG_FILES([
 Makefile
 asc2uni/Makefile
