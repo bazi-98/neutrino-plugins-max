@@ -41,6 +41,15 @@ plugin_DATA = \
 tuxwetterdir = $(CONFIGDIR)/tuxwetter
 
 tuxwetter_DATA = \
+	convert.list \
+	startbild.jpg \
+	tuxwetter.conf \
+	tuxwetter.mcfg \
+	tuxwetter.png
+
+tuxwetter_iconsdir = $(CONFIGDIR)/tuxwetter/icons
+
+tuxwetter_icons_DATA = \
 	icons/clear-day.png \
 	icons/clear-night.png \
 	icons/cloudy.png \
@@ -50,12 +59,7 @@ tuxwetter_DATA = \
 	icons/rain.png \
 	icons/sleet.png \
 	icons/snow.png \
-	icons/wind.png \
-	convert.list \
-	startbild.jpg \
-	tuxwetter.conf \
-	tuxwetter.mcfg \
-	tuxwetter.png
+	icons/wind.png
 
 install-data-hook:
 	ln -sf $(PLUGINDIR)/tuxwetter.so $(DESTDIR)$(bindir)/tuxwetter
