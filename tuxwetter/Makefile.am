@@ -41,6 +41,16 @@ plugin_DATA = \
 tuxwetterdir = $(CONFIGDIR)/tuxwetter
 
 tuxwetter_DATA = \
+	icons/clear-day.png \
+	icons/clear-night.png \
+	icons/cloudy.png \
+	icons/fog.png \
+	icons/partly-cloudy-day.png \
+	icons/partly-cloudy-night.png \
+	icons/rain.png \
+	icons/sleet.png \
+	icons/snow.png \
+	icons/wind.png \
 	convert.list \
 	startbild.jpg \
 	tuxwetter.conf \
