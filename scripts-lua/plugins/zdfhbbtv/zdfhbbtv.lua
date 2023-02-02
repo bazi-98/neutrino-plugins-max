@@ -1,7 +1,7 @@
   --[[
 	ZDF HBBTV
 	Copyright (C) 2021 Jacek Jendrzej 'satbaby'
-	Copyright (C) 2022 'bazi98' for Vers. 0.23 beta - add. UHD 
+	Copyright (C) 2022 'bazi98' for Vers. 0.23 beta - add. UHD
 	License: WTFPLv2
 ]]
 
