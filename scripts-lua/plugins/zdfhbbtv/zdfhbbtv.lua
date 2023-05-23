@@ -1,12 +1,12 @@
   --[[
 	ZDF HBBTV
 	Copyright (C) 2021 Jacek Jendrzej 'satbaby'
-	Copyright (C) 2022 'bazi98' for Vers. 0.23 beta - add. UHD
+	Copyright (C) 2022 'bazi98' for Vers. 0.24  - add. UHD and FullHD
 	License: WTFPLv2
 ]]
 
 function init()
-	Version = 0.23
+	Version = 0.24
 	CONF_PATH = "/var/tuxbox/config/"
 	if DIR and DIR.CONFIGDIR then
 		CONF_PATH = DIR.CONFIGDIR .. '/'
@@ -653,9 +653,15 @@ function getZDFstream(tab)
 						tab.stream = h265.main.deu.q5.url
 						--vf = "h265 - UHD"
 						break
-					elseif maxRes > 1281 and h265 and h265.main.deu.q3 then
-						tab.stream = h265.main.deu.q3.url
-						--vf = "h265 - Full HD"
+					elseif maxRes > 1281 and streams.h265_aac_mp4_http_na_na and mp4.main.deu.q4 then
+						tab.stream = mp4.main.deu.q4.url
+					elseif maxRes > 1281 and streams.h265_aac_mp4_http_na_na and mp4.main.deu.q3 then
+						tab.stream = mp4.main.deu.q3.url
+					elseif maxRes > 1281 and streams.h264_aac_mp4_http_na_na and mp4.main.deu.q4 then
+						tab.stream = mp4.main.deu.q4.url
+						break
+					elseif maxRes > 1281 and streams.h264_aac_mp4_http_na_na and mp4.main.deu.q3 then
+						tab.stream = mp4.main.deu.q3.url
 						break
 					elseif maxRes > 1281 and m3u8 and m3u8.main.deu.q3 then
 						tab.stream , tab.audiostream = getVideoUrlM3U8(m3u8.main.deu.q3.url)
